@@ -1,7 +1,7 @@
-const bcrypt = require("bcrypt");
 const User = require('@models/user.model');
 const { generateToken } = require('@services/jwt.service');
 const { refreshToken } = require('@services/jwt.service');
+const { hashedPassword, comparePassword } = require("@utils/bcrypt.password");
 
 module.exports.login = async (req, res) => {
     const { email, password } = req.body;
@@ -15,7 +15,7 @@ module.exports.login = async (req, res) => {
         }
 
         // Compare password
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await comparePassword(password, user.password);
 
         if (!isMatch) {
             return res.status(401).json({ message: "Wrong password" });
@@ -44,11 +44,9 @@ module.exports.login = async (req, res) => {
 module.exports.register = async (req, res) => {
     const { username, email, password } = req.body;
     try {
-        const saltRounds = 10; // recommended
         // hash password
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const user = await User.create({ username, email, password: hashedPassword });
-
+        const newPassword = await hashedPassword(password);
+        const user = await User.create({ username, email, password: newPassword });
         if (user) {
             const result = {
                 id: user.id,
