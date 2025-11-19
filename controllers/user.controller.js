@@ -1,5 +1,5 @@
 const User = require('@models/user.model');
-const bcrypt = require("bcrypt");
+const { hashedPassword } = require("@utils/bcrypt.password");
 
 module.exports.index = async (req, res) => {
     const users = await User.findAll();
@@ -23,10 +23,9 @@ module.exports.find = async (req, res) => {
 module.exports.create = async (req, res) => {
     const { username, email, password } = req.body;
     try {
-        const saltRounds = 10; // recommended
         // hash password
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const user = await User.create({ username, email, password: hashedPassword });
+        const newPassword = await hashedPassword(password);
+        const user = await User.create({ username, email, password: newPassword });
 
         if (user) {
             const result = {

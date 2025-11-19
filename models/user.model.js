@@ -12,13 +12,16 @@ const User = sequelize.define('User', {
     email: {
         type: DataTypes.STRING,
         unique: true,
-        set(value) { // Custom setter for 'username'
+        set(value) { // Custom setter for 'email'
             this.setDataValue('email', value.toLowerCase());
         }
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        get() {
+            return undefined; // hide password
+        }
     }
 }, {
     tableName: 'users',

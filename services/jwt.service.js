@@ -15,7 +15,11 @@ module.exports.verifyToken = function (tokenToVerify) {
         const decoded = jwt.verify(tokenToVerify, secretKey);
         return decoded;
     } catch (err) {
-        console.error('Token verification failed:', err.message);
+        if (err.name === "TokenExpiredError") {
+            console.log("Token has expired");
+        } else {
+            console.log("Invalid token");
+        }
         return false;
     }
 }
