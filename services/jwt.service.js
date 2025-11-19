@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET_KEY;
 
-module.exports.generateToken = function (payload) {
+module.exports.generateToken = (payload) => {
     const token = jwt.sign(payload, secretKey, {
         expiresIn: '15m'
     }
@@ -10,7 +10,7 @@ module.exports.generateToken = function (payload) {
     return token;
 }
 
-module.exports.verifyToken = function (tokenToVerify) {
+module.exports.verifyToken = (tokenToVerify) => {
     try {
         const decoded = jwt.verify(tokenToVerify, secretKey);
         return decoded;
@@ -24,7 +24,7 @@ module.exports.verifyToken = function (tokenToVerify) {
     }
 }
 
-module.exports.refreshToken = function (payload) {
+module.exports.refreshToken = (payload) => {
     const token = jwt.sign(payload, secretKey, {
         expiresIn: '7d'
     }
