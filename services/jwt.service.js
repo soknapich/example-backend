@@ -3,21 +3,27 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET_KEY;
 
 module.exports.generateToken = function (payload) {
-    // Store in environment variables for security
-    const token = jwt.sign(payload, secretKey, { expiresIn: '1h' }); // Token expires in 1 hour
+    const token = jwt.sign(payload, secretKey, {
+        expiresIn: '15m'
+    }
+    ); // Token expires in 15 minutes
     return token;
 }
-
 
 module.exports.verifyToken = function (tokenToVerify) {
     try {
         const decoded = jwt.verify(tokenToVerify, secretKey);
-        //console.log('Token verified:', decoded);
-        //Access decoded.userId, decoded.username, etc.
         return decoded;
     } catch (err) {
         console.error('Token verification failed:', err.message);
-        // Handle expired tokens or invalid signatures
         return false;
     }
+}
+
+module.exports.refreshToken = function (payload) {
+    const token = jwt.sign(payload, secretKey, {
+        expiresIn: '7d'
+    }
+    ); // Token expires in 7 days
+    return token;
 }

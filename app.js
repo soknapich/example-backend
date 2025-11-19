@@ -2,9 +2,10 @@ require("./config/app.config");
 const express = require("express");
 const app = express();
 const cors = require("cors");
-
+const cookieParser = require("cookie-parser");
 const logMiddleware = require("@middleware/log.middleware");
 const routers = require("@constants/routers.constant");
+
 
 
 // Enable CORS for all origins
@@ -18,6 +19,7 @@ app.use(cors({
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(logMiddleware);
 
 //Routes

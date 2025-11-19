@@ -8,6 +8,7 @@ const baseMiddleware = require("@middleware/base.middleware");
 const indexRoute = require('@routes/index.route');
 const userRoute = require("@routes/user.route");
 const productRoute = require("@routes/product.route");
+const authRoute = require("@routes/auth.route");
 
 
 const routers = [
@@ -15,6 +16,11 @@ const routers = [
     uri: `/`,
     middleware: baseMiddleware,
     route: indexRoute
+  },
+  {
+    uri: `${appApi}/auth`,
+    middleware: baseMiddleware,
+    route: authRoute
   },
   {
     uri: `${appApi}/users`,

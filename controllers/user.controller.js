@@ -1,5 +1,5 @@
 const User = require('@models/user.model');
-const { generateToken } = require('@services/jwt.service');
+const bcrypt = require("bcrypt");
 
 module.exports.index = async (req, res) => {
     const users = await User.findAll();
@@ -21,16 +21,21 @@ module.exports.find = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
+    const { username, email, password } = req.body;
     try {
-        const user = await User.create(req.body);
+        const saltRounds = 10; // recommended
+        // hash password
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const user = await User.create({ username, email, password: hashedPassword });
+
         if (user) {
-            const payload = {
+            const result = {
                 id: user.id,
                 username: user.username,
                 email: user.email
             };
-            const token = generateToken(payload);
-            res.json({ data: payload, token: token });
+
+            res.json({ data: result });
         }
     } catch (error) {
         res.status(500).json({ error });
