@@ -2,14 +2,18 @@ const User = require('@models/user.model');
 const { hashedPassword } = require("@utils/bcrypt.password");
 
 module.exports.index = async (req, res) => {
-    const users = await User.findAll();
+    const users = await User.findAll({
+        attributes: { exclude: ["password"] }
+    });
     res.json({ data: users });
 };
 
 module.exports.find = async (req, res) => {
     try {
         const { id } = req.params;
-        const user = await User.findByPk(id);
+        const user = await User.findByPk(id, {
+            attributes: { exclude: ["password"] }
+        });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }

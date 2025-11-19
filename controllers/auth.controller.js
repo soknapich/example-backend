@@ -4,10 +4,20 @@ const { refreshToken } = require('@services/jwt.service');
 const { hashedPassword, comparePassword } = require("@utils/bcrypt.password");
 
 module.exports.login = async (req, res) => {
-    const { email, password } = req.body;
+
+    const { email, username, password } = req.body;
+
+    let fieldValue = {};
+    
+    if (username) {
+        fieldValue = { username: username.toLowerCase() };
+    }else{
+        fieldValue = { email: email.toLowerCase() };
+    }
+
     try {
         const user = await User.findOne({
-            where: { email: email.toLowerCase() }
+            where: fieldValue
         });
 
         if (!user) {

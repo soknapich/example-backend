@@ -4,6 +4,7 @@ const sequelize = require('@config/db.config');
 const User = sequelize.define('User', {
     username: {
         type: DataTypes.STRING,
+        unique: true,
         allowNull: false,
         set(value) { // Custom setter for 'username'
             this.setDataValue('username', value.toLowerCase());
@@ -12,6 +13,7 @@ const User = sequelize.define('User', {
     email: {
         type: DataTypes.STRING,
         unique: true,
+        allowNull: false,
         set(value) { // Custom setter for 'email'
             this.setDataValue('email', value.toLowerCase());
         }
@@ -19,9 +21,6 @@ const User = sequelize.define('User', {
     password: {
         type: DataTypes.STRING,
         allowNull: false,
-        get() {
-            return undefined; // hide password
-        }
     }
 }, {
     tableName: 'users',
