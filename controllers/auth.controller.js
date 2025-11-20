@@ -5,20 +5,10 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET_KEY;
 
 module.exports.login = async (req, res) => {
-
-    const { email, username, password } = req.body;
-
-    let fieldValue = {};
-
-    if (username) {
-        fieldValue = { username: username.toLowerCase() };
-    } else {
-        fieldValue = { email: email.toLowerCase() };
-    }
-
+    const { email, password } = req.body;
     try {
         const user = await User.findOne({
-            where: fieldValue
+            where:  { email: email.toLowerCase() }
         });
 
         if (!user) {
