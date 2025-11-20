@@ -17,8 +17,8 @@ const logger = createLogger({
   ),
   transports: [
     new transports.Console(), // log to console
-    new transports.File({ filename: `logs/error_${date}.log`, level: 'error' }),
-    new transports.File({ filename: `logs/combined_${date}.log` })
+    new transports.File({ filename: `logs/${date}.log`, level: 'error' }),
+    new transports.File({ filename: `logs/${date}_error.log` })
   ]
 });
 
