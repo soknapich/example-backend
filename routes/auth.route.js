@@ -1,8 +1,16 @@
 const express = require("express");
-const { login, register, refreshToken } = require("@controllers/auth.controller");
 const authRoute = express.Router();
 
-const { loginValidator, registerValidator } = require('@validators/user.validator');
+const {
+    login,
+    register,
+    refreshToken
+} = require("@controllers/auth.controller");
+
+const {
+    loginValidator,
+    registerValidator
+} = require('@validators/user.validator');
 
 //Get login
 authRoute.post("/login", loginValidator, login);
