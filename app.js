@@ -5,7 +5,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const logMiddleware = require("@middleware/log.middleware");
 const routers = require("@constants/routers.constant");
-
+const logger = require("@utils/logger");
 
 
 // Enable CORS for all origins
@@ -29,11 +29,12 @@ routers.forEach((r) => {
 
 // 404 middleware (must be AFTER all routes)
 app.use((req, res, next) => {
+  logger.error('Not Found');
   res.status(404).json({ message: "Not Found" });
 });
 // Error handling middleware (optional)
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  logger.error(err.stack);
   res.status(500).json({ message: "Server Error" });
 });
 
