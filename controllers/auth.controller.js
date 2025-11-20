@@ -84,11 +84,11 @@ module.exports.refreshToken = async (req, res) => {
             email: user.email
         };
 
-        const refToken = generateRefreshToken(result);
+        //const refToken = generateRefreshToken(result);
         const newAccessToken = generateToken(result);
         res.json({
             "token": newAccessToken, 
-            "refreshToken": refToken
+            //"refreshToken": refToken
         });
 
     });
