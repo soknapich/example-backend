@@ -6,7 +6,7 @@ module.exports.index = async (req, res) => {
         attributes: { exclude: ["password"] }
     });
     res.json({ data: users });
-};
+}
 
 module.exports.find = async (req, res) => {
     try {
@@ -22,7 +22,7 @@ module.exports.find = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-};
+}
 
 module.exports.create = async (req, res) => {
     const { username, email, password } = req.body;
@@ -43,4 +43,4 @@ module.exports.create = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error });
     }
-};
+}

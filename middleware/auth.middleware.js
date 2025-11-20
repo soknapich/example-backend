@@ -16,4 +16,4 @@ module.exports = (req, res, next) => {
         logger.warn("Unauthorized");
         res.status(401).json({ message: "Unauthorized" });
     }
-};
+}

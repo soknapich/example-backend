@@ -1,17 +1,18 @@
 const User = require('@models/user.model');
-const { generateToken } = require('@services/jwt.service');
-const { refreshToken } = require('@services/jwt.service');
+const { generateToken, generateRefreshToken } = require('@services/jwt.service');
 const { hashedPassword, comparePassword } = require("@utils/bcrypt.password");
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.JWT_SECRET_KEY;
 
 module.exports.login = async (req, res) => {
 
     const { email, username, password } = req.body;
 
     let fieldValue = {};
-    
+
     if (username) {
         fieldValue = { username: username.toLowerCase() };
-    }else{
+    } else {
         fieldValue = { email: email.toLowerCase() };
     }
 
@@ -38,7 +39,7 @@ module.exports.login = async (req, res) => {
         };
 
         const token = generateToken(result);
-        const refToken = refreshToken(result);
+        const refToken = generateRefreshToken(result);
 
         res.json({
             "user": result,
@@ -49,7 +50,7 @@ module.exports.login = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error });
     }
-};
+}
 
 module.exports.register = async (req, res) => {
     const { username, email, password } = req.body;
@@ -69,4 +70,26 @@ module.exports.register = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error });
     }
-};
+}
+
+module.exports.refreshToken = async (req, res) => {
+    const { token } = req.body;
+    if (!token) return res.sendStatus(401);
+    jwt.verify(token, secretKey, (err, user) => {
+        if (err) return res.sendStatus(403);
+        // Optionally check DB if refresh token is still valid
+        const result = {
+            id: user.id,
+            username: user.username,
+            email: user.email
+        };
+
+        const refToken = generateRefreshToken(result);
+        const newAccessToken = generateToken(result);
+        res.json({
+            "token": newAccessToken, 
+            "refreshToken": refToken
+        });
+
+    });
+}

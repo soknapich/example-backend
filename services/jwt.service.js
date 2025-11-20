@@ -11,6 +11,14 @@ module.exports.generateToken = (payload) => {
     return token;
 }
 
+module.exports.generateRefreshToken = (payload) => {
+    const token = jwt.sign(payload, secretKey, {
+        expiresIn: '7d'
+    }
+    ); // Token expires in 7 days
+    return token;
+}
+
 module.exports.verifyToken = (tokenToVerify) => {
     try {
         const decoded = jwt.verify(tokenToVerify, secretKey);
@@ -23,12 +31,4 @@ module.exports.verifyToken = (tokenToVerify) => {
         }
         return false;
     }
-}
-
-module.exports.refreshToken = (payload) => {
-    const token = jwt.sign(payload, secretKey, {
-        expiresIn: '7d'
-    }
-    ); // Token expires in 7 days
-    return token;
 }
