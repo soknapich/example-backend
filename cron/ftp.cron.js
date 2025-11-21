@@ -1,5 +1,3 @@
-
-require('module-alias/register');
 const cron = require("node-cron");
 const CRON_TIMER = process.env.CRON_TIMER || "* * * * *";
 
