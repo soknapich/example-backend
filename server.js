@@ -1,6 +1,8 @@
 // server.js
-const app = require('./app');
+require('module-alias/register');
 const sequelize = require('@config/db.config');
+const app = require('@app');
+
 const PORT = process.env.APP_PORT || 3000;
 const logger = require('@utils/logger');
 

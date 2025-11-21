@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node server.js",
-    "dev": "cross-env NODE_ENV=development nodemon server.js"
+    "start": "dotenv -e .env.production node server.js",
+    "dev": "dotenv  -e .env.development nodemon server.js",
+    "cron": "dotenv -e .env.development node ./cron/ftp.cron"
   },
   "keywords": [],
   "author": "",
@@ -20,11 +21,12 @@
     "jsonwebtoken": "^9.0.2",
     "module-alias": "^2.2.3",
     "mysql2": "^3.15.3",
+    "node-cron": "^4.2.1",
     "sequelize": "^6.37.7",
     "winston": "^3.18.3"
   },
   "_moduleAliases": {
-    "@": ".",
+    "@app": "./",
     "@config": "config",
     "@constants": "constants",
     "@controllers": "controllers",
@@ -37,7 +39,7 @@
     "@validators": "validators"
   },
   "devDependencies": {
-    "cross-env": "^10.1.0",
+    "dotenv-cli": "^11.0.0",
     "nodemon": "^3.1.11"
   }
 }
