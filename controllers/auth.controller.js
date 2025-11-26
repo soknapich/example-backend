@@ -118,11 +118,11 @@ module.exports.verifyToken = async (req, res) => {
             email: user.email
         };
 
-        const newAccessToken = generateToken(result);
+        // const newAccessToken = generateToken(result);
         res.json({
             status: 200,
             message: "sucess",
-            token: newAccessToken
+            data: result
         });
 
     });
