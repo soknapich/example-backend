@@ -97,7 +97,7 @@ module.exports.verifyToken = async (req, res) => {
     const { token } = req.body;
 
     if (!token) {
-        res.json({
+        return res.json({
             status: 401,
             message: "No token provided"
         });
@@ -105,7 +105,7 @@ module.exports.verifyToken = async (req, res) => {
 
     jwt.verify(token, secretKey, (err, user) => {
         if (err) {
-            res.json({
+            return res.json({
                 status: 403,
                 message: "Invalid token"
             });
