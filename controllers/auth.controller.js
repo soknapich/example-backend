@@ -13,14 +13,18 @@ module.exports.login = async (req, res) => {
         });
 
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({
+                message: "User not found"
+            });
         }
 
         // Compare password
         const isMatch = await comparePassword(password, user.password);
 
         if (!isMatch) {
-            return res.status(404).json({ message: "Wrong password" });
+            return res.status(404).json({
+                message: "Wrong password"
+            });
         }
 
         const result = {
@@ -33,10 +37,10 @@ module.exports.login = async (req, res) => {
         const refToken = generateRefreshToken(result);
 
         res.json({
-            "status": 200,
-            "user": result,
-            "token": token,
-            "refreshToken": refToken
+            status: 200,
+            user: result,
+            token: token,
+            refreshToken: refToken
         });
 
     } catch (error) {
@@ -80,8 +84,9 @@ module.exports.refreshToken = async (req, res) => {
         //const refToken = generateRefreshToken(result);
         const newAccessToken = generateToken(result);
         res.json({
-            "token": newAccessToken,
-            //"refreshToken": refToken
+            status: 200,
+            message: "sucess",
+            token: newAccessToken
         });
 
     });
@@ -93,7 +98,7 @@ module.exports.verifyToken = async (req, res) => {
 
     if (!token) {
         res.json({
-            status: 401, 
+            status: 401,
             message: "No token provided"
         });
     }
@@ -112,10 +117,12 @@ module.exports.verifyToken = async (req, res) => {
             username: user.username,
             email: user.email
         };
-        
+
         const newAccessToken = generateToken(result);
         res.json({
-            "token": newAccessToken
+            status: 200,
+            message: "sucess",
+            token: newAccessToken
         });
 
     });
