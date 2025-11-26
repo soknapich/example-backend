@@ -4,7 +4,8 @@ const authRoute = express.Router();
 const {
     login,
     register,
-    refreshToken
+    refreshToken,
+	verifyToken
 } = require("@controllers/auth.controller");
 
 const {
@@ -20,5 +21,10 @@ authRoute.post("/register", registerValidator, register);
 
 //refreshToken
 authRoute.post("/refreshToken", refreshToken);
+
+
+//verifyToken
+authRoute.post("/verifyToken", verifyToken);
+
 
 module.exports = authRoute;

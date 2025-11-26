@@ -2,13 +2,14 @@ const User = require('@models/user.model');
 const { generateToken, generateRefreshToken } = require('@services/jwt.service');
 const { hashedPassword, comparePassword } = require("@utils/bcrypt.password");
 const jwt = require('jsonwebtoken');
+
 const secretKey = process.env.JWT_SECRET_KEY;
 
 module.exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({
-            where:  { email: email.toLowerCase() }
+            where: { email: email.toLowerCase() }
         });
 
         if (!user) {
@@ -19,7 +20,7 @@ module.exports.login = async (req, res) => {
         const isMatch = await comparePassword(password, user.password);
 
         if (!isMatch) {
-            return res.status(401).json({ message: "Wrong password" });
+            return res.status(404).json({ message: "Wrong password" });
         }
 
         const result = {
@@ -32,6 +33,7 @@ module.exports.login = async (req, res) => {
         const refToken = generateRefreshToken(result);
 
         res.json({
+            "status": 200,
             "user": result,
             "token": token,
             "refreshToken": refToken
@@ -62,6 +64,7 @@ module.exports.register = async (req, res) => {
     }
 }
 
+
 module.exports.refreshToken = async (req, res) => {
     const { token } = req.body;
     if (!token) return res.sendStatus(401);
@@ -77,8 +80,42 @@ module.exports.refreshToken = async (req, res) => {
         //const refToken = generateRefreshToken(result);
         const newAccessToken = generateToken(result);
         res.json({
-            "token": newAccessToken, 
+            "token": newAccessToken,
             //"refreshToken": refToken
+        });
+
+    });
+}
+
+
+module.exports.verifyToken = async (req, res) => {
+    const { token } = req.body;
+
+    if (!token) {
+        res.json({
+            status: 401, 
+            message: "No token provided"
+        });
+    }
+
+    jwt.verify(token, secretKey, (err, user) => {
+        if (err) {
+            res.json({
+                status: 403,
+                message: "Invalid token"
+            });
+        }
+
+        // Optionally check DB if refresh token is still valid
+        const result = {
+            id: user.id,
+            username: user.username,
+            email: user.email
+        };
+        
+        const newAccessToken = generateToken(result);
+        res.json({
+            "token": newAccessToken
         });
 
     });
