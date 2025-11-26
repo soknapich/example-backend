@@ -5,9 +5,9 @@ const logger = require('@utils/logger');
 
 module.exports.generateToken = (payload) => {
     const token = jwt.sign(payload, secretKey, {
-        expiresIn: '15m'
+        expiresIn: '1h'
     }
-    ); // Token expires in 15 minutes
+    ); // Token expires in 1h
     return token;
 }
 

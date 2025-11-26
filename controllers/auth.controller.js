@@ -70,23 +70,24 @@ module.exports.register = async (req, res) => {
 
 
 module.exports.refreshToken = async (req, res) => {
-    const { token } = req.body;
-    if (!token) return res.sendStatus(401);
-    jwt.verify(token, secretKey, (err, user) => {
+    const { refreshToken } = req.body;
+    if (!refreshToken) return res.sendStatus(401);
+    jwt.verify(refreshToken, secretKey, (err, user) => {
         if (err) return res.sendStatus(403);
-        // Optionally check DB if refresh token is still valid
+        // Optionally check DB if refresh refreshToken is still valid
         const result = {
             id: user.id,
             username: user.username,
             email: user.email
         };
 
-        //const refToken = generateRefreshToken(result);
+        const refToken = generateRefreshToken(result);
         const newAccessToken = generateToken(result);
         res.json({
-            status: 200,
-            message: "sucess",
-            token: newAccessToken
+            'status': 200,
+            'message': "sucess",
+            'token': newAccessToken,
+			'refreshToken': refToken
         });
 
     });
@@ -97,18 +98,12 @@ module.exports.verifyToken = async (req, res) => {
     const { token } = req.body;
 
     if (!token) {
-        return res.json({
-            status: 401,
-            message: "No token provided"
-        });
+        return res.sendStatus(401);
     }
 
     jwt.verify(token, secretKey, (err, user) => {
         if (err) {
-            return res.json({
-                status: 403,
-                message: "Invalid token"
-            });
+            return res.sendStatus(403);
         }
 
         // Optionally check DB if refresh token is still valid
@@ -118,7 +113,7 @@ module.exports.verifyToken = async (req, res) => {
             email: user.email
         };
 
-        // const newAccessToken = generateToken(result);
+        //const newAccessToken = generateToken(result);
         res.json({
             status: 200,
             message: "sucess",
